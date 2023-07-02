@@ -1,0 +1,20 @@
+{
+    "rules": [
+        {
+            "saddr": "10.11.12.0/24",
+            "daddr": "192.168.1.0/24",
+            "proto": "tcp",
+            "dport": "22",
+            "sport": "1024-65535",
+            "action": "allow",
+            "priority": 2
+        },
+        {
+            "saddr": "192.168.1.0/24",
+            "daddr": "192.168.1.0/24",
+            "proto": "icmp",
+            "action": "deny",
+            "priority": 1
+        }
+    ]
+}

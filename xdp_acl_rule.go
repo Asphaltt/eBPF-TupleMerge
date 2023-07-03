@@ -17,12 +17,13 @@ type rule struct {
 	smask      [4]byte
 	daddr      [4]byte
 	dmask      [4]byte
-	sportStart [2]byte
-	sportEnd   [2]byte
-	dportStart [2]byte
-	dportEnd   [2]byte
+	_pad0      uint8 // Note: it's weird to pad here
+	sportStart uint16
+	sportEnd   uint16
+	dportStart uint16
+	dportEnd   uint16
 	action     uint8
-	_pad       uint16
+	_pad1      uint8
 	priority   uint64
 }
 
@@ -52,7 +53,7 @@ func (r *rule) doHash() {
 }
 
 func (r *rule) toBinary() []byte {
-	siz := int(unsafe.Sizeof(*r)) - 8 // -8 because priority is not part of the binary representation
+	const siz = 36 // sizeof(struct acl_rule)
 
 	var b []byte
 	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))

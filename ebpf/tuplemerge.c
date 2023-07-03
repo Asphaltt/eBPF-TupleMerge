@@ -41,12 +41,13 @@ struct acl_rule {
     __be32 smask;
     __be32 daddr;
     __be32 dmask;
+    __u8 _pad0;
     __be16 sport_start;
     __be16 sport_end;
     __be16 dport_start;
     __be16 dport_end;
     __u8 action;
-    __u16 _pad;
+    __u8 _pad1;
 } __attribute__((packed));
 
 #define __sizeof_acl_rule (sizeof(struct acl_rule))
@@ -154,8 +155,8 @@ static __always_inline int match_acl_rules(struct xdp_md *ctx)
     bool is_icmp = (iph->protocol == IPPROTO_ICMP);
 
     if (is_tcp_udp) {
-        match.pkt.sport = udph->source;
-        match.pkt.dport = udph->dest;
+        match.pkt.sport = bpf_ntohs(udph->source);
+        match.pkt.dport = bpf_ntohs(udph->dest);
     } else if (is_icmp) {
         // do nothing
     } else {

@@ -7,6 +7,15 @@
             "dport": "22",
             "sport": "1024-65535",
             "action": "allow",
+            "priority": 3
+        },
+        {
+            "saddr": "192.168.1.0/24",
+            "daddr": "192.168.1.0/24",
+            "proto": "tcp",
+            "dport": "8080",
+            "sport": "0-65535",
+            "action": "deny",
             "priority": 2
         },
         {

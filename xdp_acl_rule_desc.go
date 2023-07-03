@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"net"
 	"net/netip"
 	"strconv"
@@ -52,15 +53,11 @@ func parseAddr(s string) ([4]byte, [4]byte, error) {
 	return addr, mask, nil
 }
 
-func h2ns(h uint16) [2]byte {
-	return [2]byte{byte(h >> 8), byte(h)}
-}
-
-func parsePort(s string) (start, end [2]byte, errr error) {
+func parsePort(s string) (start, end uint16, errr error) {
 	sport := strings.ToLower(s)
 	switch sport {
 	case "*", "all":
-		return [2]byte{0, 0}, [2]byte{0xff, 0xff}, nil
+		return 0, math.MaxUint16, nil
 
 	default:
 	}
@@ -73,8 +70,8 @@ func parsePort(s string) (start, end [2]byte, errr error) {
 			return
 		}
 
-		start = [2]byte{byte(n >> 8), byte(n)}
-		end = [2]byte{byte(n >> 8), byte(n)}
+		start = uint16(n)
+		end = uint16(n)
 		return
 	}
 
@@ -90,8 +87,8 @@ func parsePort(s string) (start, end [2]byte, errr error) {
 		return
 	}
 
-	start = h2ns(uint16(x))
-	end = h2ns(uint16(y))
+	start = uint16(x)
+	end = uint16(y)
 	return
 }
 
